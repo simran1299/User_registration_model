@@ -81,6 +81,29 @@ def change_pw(request):
         USD=User.objects.get(username=username)
         USD.set_password(np)
         USD.save()
-        return HttpResponse('changed successfully')
+        return HttpResponseRedirect(reverse('user_login'))
     return render(request,'change_pw.html')
-    
+
+
+
+def forgot_password(request):
+    if request.method=='POST':
+        username=request.POST['username']
+        np=request.POST['np']
+        USO=User.objects.filter(username=username)
+        if USO:
+            USO[0].set_password(np)
+            USO[0].save()
+            # send_mail('reset_password',
+            # 'password is reset is successfully....',
+            # '2kl18bm018@gmail.com',
+            # [USO.email],fail_silently=False)
+            # return HttpResponseRedirect(reverse('user_login'))
+
+        else:
+            return HttpResponse('Username is not avialable')
+    return render(request,'forgot_password.html')
+
+
+
+
